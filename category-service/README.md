@@ -15,3 +15,10 @@ make run
 ```sh
 make up
 ```
+
+## Добавление сущностей
+
+```sh
+pgcli -h localhost -p 4432 -U user -d db
+user@localhost:db> INSERT INTO category (name, created_at) VALUES ('Auto', NOW()), ('Electronics', NOW()), ('Toys', NOW());
+```

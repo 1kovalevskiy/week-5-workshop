@@ -6,7 +6,7 @@ endif
 export GO111MODULE=on
 
 SERVICE_NAME=category-service
-SERVICE_PATH=ozonmp/week-4-workshop/category-service
+SERVICE_PATH=ozonmp/week-5-workshop/category-service
 
 OS_NAME=$(shell uname -s)
 OS_ARCH=$(shell uname -m)
@@ -59,3 +59,7 @@ build: generate .build
 			-X 'github.com/$(SERVICE_PATH)/internal/config.commitHash=$(COMMIT_HASH)' \
 		" \
 		-o ./bin/grpc-server$(shell go env GOEXE) ./cmd/grpc-server/main.go
+
+.PHONY: migrate
+migrate:
+	go run cmd/migration/main.go

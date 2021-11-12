@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
-	"github.com/ozonmp/week-4-workshop/category-service/internal/service/database"
-	taskpkg "github.com/ozonmp/week-4-workshop/category-service/internal/service/task"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
+	taskpkg "github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
 )
 
 type Repository struct {

@@ -10,13 +10,13 @@ import (
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 
-	"github.com/ozonmp/week-4-workshop/category-service/internal/config"
-	"github.com/ozonmp/week-4-workshop/category-service/internal/server"
-	"github.com/ozonmp/week-4-workshop/category-service/internal/service/category"
-	cat_repository "github.com/ozonmp/week-4-workshop/category-service/internal/service/category/repository"
-	"github.com/ozonmp/week-4-workshop/category-service/internal/service/database"
-	"github.com/ozonmp/week-4-workshop/category-service/internal/service/task"
-	task_repository "github.com/ozonmp/week-4-workshop/category-service/internal/service/task/repository"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/server"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/service/category"
+	cat_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/category/repository"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
+	task_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/task/repository"
 )
 
 func main() {

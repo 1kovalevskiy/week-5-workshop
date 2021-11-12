@@ -1,12 +1,11 @@
 package main
 
 import (
-	"context"
 	"log"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
-	"github.com/ozonmp/week-5-workshop/category-service/migrations"
+	"github.com/ozonmp/week-5-workshop/product-service/internal/config"
+	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
+	"github.com/ozonmp/week-5-workshop/product-service/migrations"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/pressly/goose/v3"
@@ -19,15 +18,15 @@ func main() {
 	}
 	cfg := config.GetConfigInstance()
 
-	ctx := context.Background()
-	db, err := database.New(ctx, cfg.Database.DSN)
+	conn, err := db.ConnectDB(&cfg.DB)
 	if err != nil {
-		log.Fatalf("database.New(): %v", err)
+		log.Fatalf("sql.Open() error: %v", err)
 	}
+	defer conn.Close()
 
 	goose.SetBaseFS(migrations.EmbedFS)
 
-	err = goose.Up(db.DB, ".")
+	err = goose.Up(conn.DB, ".")
 	if err != nil {
 		log.Fatalf("goose.Up(): %v", err)
 	}

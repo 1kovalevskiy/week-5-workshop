@@ -83,8 +83,8 @@ services:
 
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
-    image: graylog/graylog:4.2
-    # image: graylog/graylog:4.2-arm64 - for Apple Macbook M1
+    # image: graylog/graylog:4.2
+    image: graylog/graylog:4.2-arm64 # - for Apple Macbook M1
     environment:
       # CHANGE ME (must be at least 16 characters)!
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
@@ -106,6 +106,8 @@ services:
       - 1514:1514
       # GELF TCP
       - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
     restart: always
 
 volumes:

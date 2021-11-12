@@ -3,10 +3,13 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
 
 	_ "github.com/jackc/pgx/v4"
@@ -22,24 +25,24 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	if err := config.ReadConfigYML("config.yml"); err != nil {
-		log.Fatal().Err(err).Msg("Failed init configuration")
+		logger.FatalKV(ctx, "Failed init configuration", "err", err)
 	}
 	cfg := config.GetConfigInstance()
 
 	flag.Parse()
 
-	log.Info().
-		Str("version", cfg.Project.Version).
-		Str("commitHash", cfg.Project.CommitHash).
-		Bool("debug", cfg.Project.Debug).
-		Str("environment", cfg.Project.Environment).
-		Msgf("Starting service: %s", cfg.Project.Name)
+	syncLogger := initLogger(ctx, cfg)
+	defer syncLogger()
 
-	// default: zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	if cfg.Project.Debug {
-		zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	}
+	logger.InfoKV(ctx, fmt.Sprintf("Starting service: %s", cfg.Project.Name),
+		"version", cfg.Project.Version,
+		"commitHash", cfg.Project.CommitHash,
+		"debug", cfg.Project.Debug,
+		"environment", cfg.Project.Environment,
+	)
 
 	categoryServiceConn, err := grpc.DialContext(
 		context.Background(),
@@ -48,12 +51,12 @@ func main() {
 		grpc.WithUnaryInterceptor(mwclient.AddAppInfoUnary),
 	)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create client")
+		logger.ErrorKV(ctx, "failed to create client", "err", err)
 	}
 
 	conn, err := db.ConnectDB(&cfg.DB)
 	if err != nil {
-		log.Fatal().Err(err).Msg("sql.Open() error")
+		logger.FatalKV(ctx, "sql.Open() error", "err", err)
 	}
 	defer conn.Close()
 
@@ -62,8 +65,26 @@ func main() {
 	productService := product_service.NewService(categoryServiceClient, conn)
 
 	if err := server.NewGrpcServer(productService).Start(&cfg); err != nil {
-		log.Error().Err(err).Msg("Failed creating gRPC server")
+		logger.ErrorKV(ctx, "Failed creating gRPC server", "err", err)
 
 		return
+	}
+}
+
+func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
+	loggingLevel := zap.InfoLevel
+	if cfg.Project.Debug {
+		loggingLevel = zap.DebugLevel
+	}
+
+	consoleCore := zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), os.Stderr, zap.NewAtomicLevelAt(loggingLevel))
+
+	notSugaredLogger := zap.New(consoleCore)
+
+	sugaredLogger := notSugaredLogger.Sugar()
+	logger.SetLogger(sugaredLogger)
+
+	return func() {
+		notSugaredLogger.Sync()
 	}
 }

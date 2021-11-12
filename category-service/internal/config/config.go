@@ -45,11 +45,16 @@ type Swagger struct {
 	Filepath string `yaml:"filepath"`
 }
 
+type Telemetry struct {
+	GraylogPath string `yaml:"graylogPath"`
+}
+
 // Project - contains all parameters project information.
 type Project struct {
 	Debug       bool   `yaml:"debug"`
 	Name        string `yaml:"name"`
 	Environment string `yaml:"environment"`
+	ServiceName string `yaml:"serviceName"`
 	Version     string
 	CommitHash  string
 }
@@ -60,11 +65,12 @@ type Database struct {
 
 // Config - contains all configuration parameters in config package.
 type Config struct {
-	Project  Project  `yaml:"project"`
-	Grpc     Grpc     `yaml:"grpc"`
-	Gateway  Gateway  `yaml:"gateway"`
-	Swagger  Swagger  `yaml:"swagger"`
-	Database Database `yaml:"database"`
+	Project   Project   `yaml:"project"`
+	Grpc      Grpc      `yaml:"grpc"`
+	Gateway   Gateway   `yaml:"gateway"`
+	Swagger   Swagger   `yaml:"swagger"`
+	Database  Database  `yaml:"database"`
+	Telemetry Telemetry `yaml:"telemetry"`
 }
 
 // ReadConfigYML - read configurations from file and init instance Config.

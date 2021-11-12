@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rs/zerolog/log"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -27,9 +27,9 @@ func GRPCUnauthenticatedRequest(ctx context.Context, req interface{}, _ *grpc.Un
 		}
 	}
 
-	err = fmt.Errorf(`got empty %q metadata`, authMetadataKey)
-	log.Error().Err(err).Msg("")
-	return nil, status.Error(codes.InvalidArgument, err.Error())
+	errMsg := fmt.Sprintf(`got empty %q metadata`, authMetadataKey)
+	logger.ErrorKV(ctx, errMsg)
+	return nil, status.Error(codes.InvalidArgument, errMsg)
 }
 
 func isAuthMD(key string, vals []string) bool {

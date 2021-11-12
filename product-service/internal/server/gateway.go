@@ -7,17 +7,19 @@ import (
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/opentracing/opentracing-go"
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 
+	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
 	desc "github.com/ozonmp/week-5-workshop/product-service/pkg/product-service"
 )
 
 func createGatewayServer(grpcAddr, gatewayAddr string, allowedOrigins []string) *http.Server {
+	ctx := context.Background()
+
 	// Create a client connection to the gRPC Server we just started.
 	// This is where the gRPC-Gateway proxies the requests.
 	conn, err := grpc.DialContext(
-		context.Background(),
+		ctx,
 		grpcAddr,
 		grpc.WithUnaryInterceptor(
 			grpc_opentracing.UnaryClientInterceptor(
@@ -27,12 +29,12 @@ func createGatewayServer(grpcAddr, gatewayAddr string, allowedOrigins []string) 
 		grpc.WithInsecure(),
 	)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to dial server")
+		logger.FatalKV(ctx, "Failed to dial server", "err", err)
 	}
 
 	mux := runtime.NewServeMux()
-	if err := desc.RegisterProductServiceHandler(context.Background(), mux, conn); err != nil {
-		log.Fatal().Err(err).Msg("Failed registration handler")
+	if err := desc.RegisterProductServiceHandler(ctx, mux, conn); err != nil {
+		logger.FatalKV(ctx, "Failed registration handler", "err", err)
 	}
 
 	gatewayServer := &http.Server{

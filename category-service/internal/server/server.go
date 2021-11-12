@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -23,6 +22,7 @@ import (
 
 	api "github.com/ozonmp/week-5-workshop/category-service/internal/app/category-service"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
+	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
 	mwserver "github.com/ozonmp/week-5-workshop/category-service/internal/pkg/mw/server"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/service/category"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
@@ -59,17 +59,17 @@ func (s *GrpcServer) Start(cfg *config.Config) error {
 	}
 
 	go func() {
-		log.Info().Msgf("Gateway server is running on %s", gatewayAddr)
+		logger.InfoKV(ctx, fmt.Sprintf("Gateway server is running on %s", gatewayAddr))
 		if err := gatewayServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Error().Err(err).Msg("Failed running gateway server")
+			logger.ErrorKV(ctx, "Failed running gateway server")
 			cancel()
 		}
 	}()
 
 	go func() {
-		log.Info().Msgf("Swagger server is running on %s", swaggerAddr)
+		logger.InfoKV(ctx, fmt.Sprintf("Swagger server is running on %s", swaggerAddr))
 		if err := swaggerServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Error().Err(err).Msg("Failed running swagger server")
+			logger.ErrorKV(ctx, "Failed running swagger server")
 			cancel()
 		}
 	}()
@@ -101,9 +101,9 @@ func (s *GrpcServer) Start(cfg *config.Config) error {
 	))
 
 	go func() {
-		log.Info().Msgf("GRPC Server is listening on: %s", grpcAddr)
+		logger.InfoKV(ctx, fmt.Sprintf("GRPC Server is listening on: %s", grpcAddr))
 		if err := grpcServer.Serve(l); err != nil {
-			log.Fatal().Err(err).Msg("Failed running gRPC server")
+			logger.FatalKV(ctx, "Failed running gRPC server", "err", err)
 		}
 	}()
 
@@ -116,19 +116,19 @@ func (s *GrpcServer) Start(cfg *config.Config) error {
 
 	select {
 	case v := <-quit:
-		log.Info().Msgf("signal.Notify: %v", v)
+		logger.InfoKV(ctx, fmt.Sprintf("signal.Notify: %v", v))
 	case done := <-ctx.Done():
-		log.Info().Msgf("ctx.Done: %v", done)
+		logger.InfoKV(ctx, fmt.Sprintf("ctx.Done: %v", done))
 	}
 
 	if err := gatewayServer.Shutdown(ctx); err != nil {
-		log.Error().Err(err).Msg("gatewayServer.Shutdown")
+		logger.ErrorKV(ctx, "gatewayServer.Shutdown")
 	} else {
-		log.Info().Msg("gatewayServer shut down correctly")
+		logger.InfoKV(ctx, "gatewayServer shut down correctly")
 	}
 
 	grpcServer.GracefulStop()
-	log.Info().Msgf("grpcServer shut down correctly")
+	logger.InfoKV(ctx, fmt.Sprintf("grpcServer shut down correctly"))
 
 	return nil
 }

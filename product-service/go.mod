@@ -8,7 +8,6 @@ require (
 	github.com/jackc/pgx/v4 v4.13.0
 	github.com/lib/pq v1.10.3
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/rs/zerolog v1.24.0
 	google.golang.org/grpc v1.41.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
@@ -29,6 +28,8 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/ozonmp/week-5-workshop/category-service/pkg/category-service v0.0.0-20211106062202-6ef7f265314c
 	github.com/pressly/goose/v3 v3.3.1
+	github.com/snovichkov/zap-gelf v1.0.1
+	go.uber.org/zap v1.13.0
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )
 

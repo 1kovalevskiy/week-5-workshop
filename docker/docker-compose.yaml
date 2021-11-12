@@ -1,7 +1,21 @@
 version: "3.7"
 
 services:
-  postgres:
+  postgres_product:
+    image: postgres:latest
+    ports:
+      - target: 5432
+        published: 4432
+        protocol: tcp
+        mode: target
+    volumes:
+      - ./postgres_product:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+  postgres_category:
     image: postgres:latest
     ports:
       - target: 5432
@@ -9,8 +23,31 @@ services:
         protocol: tcp
         mode: target
     volumes:
-      - ./postgres:/var/lib/postgresql/data:rw
+      - ./postgres_category:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_DB: db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus:/data:rw
+    ports:
+      - target: 9090
+        published: 9090
+        protocol: tcp
+        mode: target
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - prometheus
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: target
+    volumes:
+      - ./grafana:/var/lib/grafana:rw

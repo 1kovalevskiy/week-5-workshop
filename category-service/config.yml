@@ -24,4 +24,4 @@ swagger:
   filepath: "swagger/api/category-service/category-service.swagger.json"
 
 database:
-  dsn: "postgres://user:password@localhost:5432/db"
+  dsn: "postgres://user:password@localhost:4432/db"

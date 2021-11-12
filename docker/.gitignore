@@ -1,1 +1,4 @@
-/postgres/
+/postgres_product/
+/postgres_category/
+/prometheus/
+/grafana/

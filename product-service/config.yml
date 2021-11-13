@@ -1,6 +1,6 @@
 project:
   name: Ozon Code Platform Template API
-  debug: true
+  debug: false
   environment: development
   serviceName: product-service
 

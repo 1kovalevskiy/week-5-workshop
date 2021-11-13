@@ -6,10 +6,10 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
-
+	"github.com/opentracing/opentracing-go"
 )
 
-type repository struct{
+type repository struct {
 	DB *sqlx.DB
 }
 
@@ -43,6 +43,8 @@ func newRepo(db *sqlx.DB) IRepository {
 }
 
 func (r repository) SaveProduct(ctx context.Context, product *Product) (int64, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repo.SaveProduct")
+	defer span.Finish()
 
 	query := sq.Insert("products").PlaceholderFormat(sq.Dollar).Columns(
 		"name", "category_id", "info").Values(product.Name, product.CategoryID, product.Attributes).Suffix("RETURNING id").RunWith(r.DB)

@@ -4,9 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
@@ -21,11 +19,6 @@ func createGatewayServer(grpcAddr, gatewayAddr string, allowedOrigins []string) 
 	conn, err := grpc.DialContext(
 		ctx,
 		grpcAddr,
-		grpc.WithUnaryInterceptor(
-			grpc_opentracing.UnaryClientInterceptor(
-				grpc_opentracing.WithTracer(opentracing.GlobalTracer()),
-			),
-		),
 		grpc.WithInsecure(),
 	)
 	if err != nil {
@@ -59,7 +52,7 @@ func cors(h http.Handler, allowedOrigins []string) http.Handler {
 		if matches {
 			w.Header().Set("Access-Control-Allow-Origin", providedOrigin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
-			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType, grpc-metadata-log-level")
 		}
 		if r.Method == "OPTIONS" {
 			return

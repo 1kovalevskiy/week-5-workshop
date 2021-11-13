@@ -41,6 +41,11 @@
             "schema": {
               "$ref": "#/definitions/v1CreateProductRequest"
             }
+          },
+          {
+            "name": "grpc-metadata-log-level",
+            "in": "header",
+            "type": "string"
           }
         ],
         "tags": [

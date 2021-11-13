@@ -13,7 +13,7 @@ make run
 ## Прогон миграций
 
 ```sh
-make up
+make migrate
 ```
 
 ## Добавление сущностей

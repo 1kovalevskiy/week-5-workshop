@@ -3,7 +3,9 @@ package product_service
 import (
 	"context"
 	"strings"
+	"time"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
 	product_service "github.com/ozonmp/week-5-workshop/product-service/internal/service/product"
 	desc "github.com/ozonmp/week-5-workshop/product-service/pkg/product-service"
@@ -58,6 +60,16 @@ func (i *Implementation) CreateProduct(ctx context.Context, req *desc.CreateProd
 
 		return nil, err
 	}
+
+	go func() {
+		time.Sleep(time.Second)
+
+		createProductSpan := opentracing.SpanFromContext(ctx)
+		notifySpan := opentracing.StartSpan("notify", opentracing.FollowsFrom(createProductSpan.Context()))
+		defer notifySpan.Finish()
+
+		time.Sleep(time.Second)
+	}()
 
 	return &desc.CreateProductResponse{
 		Result: convertProductToPb(res),

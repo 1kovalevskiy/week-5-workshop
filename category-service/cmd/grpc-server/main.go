@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"time"
 
@@ -21,6 +22,10 @@ import (
 	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
 	task_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/task/repository"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func main() {
 	ctx := context.Background()

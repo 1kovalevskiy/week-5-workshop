@@ -15,14 +15,16 @@ func WithTx(ctx context.Context, db *sqlx.DB, fn WithTxFunc) error {
 		return errors.Wrap(err, "db.BeginTxx()")
 	}
 
-	if err = fn(ctx, t); err != nil {
+	err = fn(ctx, t)
+	if err != nil {
 		if errRollback := t.Rollback(); errRollback != nil {
 			return errors.Wrap(err, "Tx.Rollback")
 		}
 		return errors.Wrap(err, "Tx.WithTxFunc")
 	}
 
-	if err = t.Commit(); err != nil {
+	err = t.Commit()
+	if err != nil {
 		return errors.Wrap(err, "Tx.Commit")
 	}
 	return nil

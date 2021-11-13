@@ -59,7 +59,7 @@ func cors(h http.Handler, allowedOrigins []string) http.Handler {
 		if matches {
 			w.Header().Set("Access-Control-Allow-Origin", providedOrigin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
-			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType, grpc-metadata-log-level")
 		}
 		if r.Method == "OPTIONS" {
 			return

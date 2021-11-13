@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func createSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Server, error) {
@@ -23,14 +25,14 @@ func createSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Se
 
 	serveMux.Handle("/swagger.json", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
-			w.Write([]byte(err.Error()))
+			_, _ = w.Write([]byte(err.Error()))
 			w.WriteHeader(500)
 			return
 		}
 
 		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(200)
-		w.Write(patchedSwagger)
+		_, _ = w.Write(patchedSwagger)
 	}))
 
 	docsServer := http.FileServer(http.Dir("./swagger/dist"))
@@ -43,6 +45,8 @@ func createSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Se
 			w.WriteHeader(404)
 		}
 	}))
+
+	serveMux.Handle("/metrics", promhttp.Handler())
 
 	gatewayServer := &http.Server{
 		Addr:    swaggerAddr,

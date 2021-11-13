@@ -16,9 +16,10 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpcrecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
 	api "github.com/ozonmp/week-5-workshop/category-service/internal/app/category-service"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
@@ -90,7 +91,8 @@ func (s *GrpcServer) Start(cfg *config.Config) error {
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_opentracing.UnaryServerInterceptor(),
-			grpcrecovery.UnaryServerInterceptor(),
+			grpc_prometheus.UnaryServerInterceptor,
+			grpc_recovery.UnaryServerInterceptor(),
 			mwserver.GRPCUnauthenticatedRequest,
 		)),
 	)

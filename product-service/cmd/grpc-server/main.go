@@ -8,6 +8,7 @@ import (
 
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
+	gelf "github.com/snovichkov/zap-gelf"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
@@ -77,12 +78,26 @@ func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
 		loggingLevel = zap.DebugLevel
 	}
 
-	consoleCore := zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), os.Stderr, zap.NewAtomicLevelAt(loggingLevel))
+	consoleCore := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		os.Stderr,
+		zap.NewAtomicLevelAt(loggingLevel),
+	)
 
-	notSugaredLogger := zap.New(consoleCore)
+	gelfCore, err := gelf.NewCore(
+		gelf.Addr(cfg.Telemetry.GraylogPath),
+		gelf.Level(loggingLevel),
+	)
+	if err != nil {
+		logger.FatalKV(ctx, "sql.Open() error", "err", err)
+	}
+
+	notSugaredLogger := zap.New(zapcore.NewTee(consoleCore, gelfCore))
 
 	sugaredLogger := notSugaredLogger.Sugar()
-	logger.SetLogger(sugaredLogger)
+	logger.SetLogger(sugaredLogger.With(
+		"service", cfg.Project.ServiceName,
+	))
 
 	return func() {
 		notSugaredLogger.Sync()

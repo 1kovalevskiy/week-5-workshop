@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	gelf "github.com/snovichkov/zap-gelf"
 
+	"github.com/opentracing/opentracing-go"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/server"
@@ -21,6 +23,8 @@ import (
 	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
 	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
 	task_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/task/repository"
+	"github.com/uber/jaeger-client-go"
+	jaegercfg "github.com/uber/jaeger-client-go/config"
 )
 
 func main() {
@@ -35,6 +39,9 @@ func main() {
 
 	syncLogger := initLogger(ctx, cfg)
 	defer syncLogger()
+
+	closer := initTracer(ctx, cfg)
+	defer closer.Close()
 
 	logger.InfoKV(ctx, fmt.Sprintf("Starting service: %s", cfg.Project.Name),
 		"version", cfg.Project.Version,
@@ -97,4 +104,28 @@ func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
 	return func() {
 		notSugaredLogger.Sync()
 	}
+}
+
+func initTracer(ctx context.Context, cfg config.Config) (closer io.Closer) {
+	// Sample configuration for testing. Use constant sampling to sample every trace
+	// and enable LogSpan to log every span via configured Logger.
+	jcfg := jaegercfg.Configuration{
+		ServiceName: cfg.Project.ServiceName,
+		Sampler: &jaegercfg.SamplerConfig{
+			Type:  jaeger.SamplerTypeConst,
+			Param: 1,
+		},
+		Reporter: &jaegercfg.ReporterConfig{
+			LogSpans: true,
+		},
+	}
+
+	// Initialize tracer with a logger and a metrics factory
+	tracer, closer, err := jcfg.NewTracer()
+	if err != nil {
+		logger.FatalKV(ctx, "cfg.NewTracer()", "err", err)
+	}
+	// Set the singleton opentracing.Tracer with the Jaeger tracer.
+	opentracing.SetGlobalTracer(tracer)
+	return closer
 }

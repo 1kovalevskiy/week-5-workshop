@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 
+	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/opentracing/opentracing-go"
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
 	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
@@ -56,7 +57,10 @@ func main() {
 		context.Background(),
 		cfg.CategoryServiceAddr,
 		grpc.WithInsecure(),
-		grpc.WithUnaryInterceptor(mwclient.AddAppInfoUnary),
+		grpc.WithChainUnaryInterceptor(
+			mwclient.AddAppInfoUnary,
+			grpc_opentracing.UnaryClientInterceptor(),
+		),
 	)
 	if err != nil {
 		logger.ErrorKV(ctx, "failed to create client", "err", err)

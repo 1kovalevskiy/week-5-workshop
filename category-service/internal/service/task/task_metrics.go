@@ -22,11 +22,11 @@ func (s Service) runTaskMetrics() {
 			metrics, err := s.repository.GetMetrics(ctx)
 			if err != nil {
 				log.Error().Msg("repository.GetMetrics()")
+			} else {
+				task_metrics.SetTaskCountTotal(metrics.AllCount, task_metrics.StatusAll)
+				task_metrics.SetTaskCountTotal(metrics.NonStartedCount, task_metrics.StatusNonStarted)
+				task_metrics.SetTaskCountTotal(metrics.StartedCount, task_metrics.StatusStarted)
 			}
-
-			task_metrics.SetTaskCountTotal(metrics.AllCount, task_metrics.StatusAll)
-			task_metrics.SetTaskCountTotal(metrics.NonStartedCount, task_metrics.StatusNonStarted)
-			task_metrics.SetTaskCountTotal(metrics.StartedCount, task_metrics.StatusStarted)
 
 			time.Sleep(5 * time.Second)
 		}

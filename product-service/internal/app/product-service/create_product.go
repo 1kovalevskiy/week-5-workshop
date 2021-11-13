@@ -2,11 +2,15 @@ package product_service
 
 import (
 	"context"
+	"strings"
 
+	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
 	product_service "github.com/ozonmp/week-5-workshop/product-service/internal/service/product"
 	desc "github.com/ozonmp/week-5-workshop/product-service/pkg/product-service"
+	"go.uber.org/zap/zapcore"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -15,6 +19,20 @@ func (i *Implementation) CreateProduct(ctx context.Context, req *desc.CreateProd
 	for idx, val := range req.GetAttributes() {
 		attributes[idx] = convertPbToProductAttributes(val)
 	}
+
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		levels := md.Get("log-level")
+		logger.InfoKV(ctx, "got log level", "levels", levels)
+		if len(levels) > 0 {
+			if parsedLevel, ok := parseLevel(levels[0]); ok {
+				newLogger := logger.CloneWithLevel(ctx, parsedLevel)
+				ctx = logger.AttachLogger(ctx, newLogger)
+			}
+		}
+	}
+
+	logger.DebugKV(ctx, "CreateProduct: some debug message")
 
 	res, err := i.productService.CreateProduct(ctx, req.GetName(), req.GetCategoryId(), attributes)
 	if err != nil {
@@ -70,5 +88,20 @@ func convertProductAttributesToPb(pa product_service.ProductAttribute) *desc.Pro
 	return &desc.ProductAttribute{
 		Id:    pa.ID,
 		Value: pa.Value,
+	}
+}
+
+func parseLevel(str string) (zapcore.Level, bool) {
+	switch strings.ToLower(str) {
+	case "debug":
+		return zapcore.DebugLevel, true
+	case "info":
+		return zapcore.InfoLevel, true
+	case "warn":
+		return zapcore.WarnLevel, true
+	case "error":
+		return zapcore.ErrorLevel, true
+	default:
+		return zapcore.DebugLevel, false
 	}
 }

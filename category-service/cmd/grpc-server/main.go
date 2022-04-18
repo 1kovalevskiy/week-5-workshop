@@ -19,14 +19,14 @@ import (
 
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/server"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/category"
-	cat_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/category/repository"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
-	task_repository "github.com/ozonmp/week-5-workshop/category-service/internal/service/task/repository"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/config"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/logger"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/server"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/category"
+	cat_repository "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/category/repository"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/database"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/task"
+	task_repository "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/task/repository"
 )
 
 func init() {

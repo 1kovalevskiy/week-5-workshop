@@ -1,4 +1,4 @@
-module github.com/ozonmp/week-5-workshop/product-service
+module github.com/ozon-edu-go-2021/week-5-workshop/product-service
 
 go 1.16
 
@@ -25,7 +25,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/Masterminds/squirrel v1.5.1
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/ozonmp/week-5-workshop/category-service/pkg/category-service v0.0.0-20211106062202-6ef7f265314c
+	github.com/ozon-edu-go-2021/week-5-workshop/category-service/pkg/category-service v0.0.0-20211106062202-6ef7f265314c
 	github.com/pressly/goose/v3 v3.3.1
 	github.com/snovichkov/zap-gelf v1.0.1
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
@@ -33,4 +33,4 @@ require (
 	go.uber.org/zap v1.13.0
 )
 
-replace github.com/ozonmp/week-5-workshop/category-service/pkg/category-service => ../category-service/pkg/category-service
+replace github.com/ozon-edu-go-2021/week-5-workshop/category-service/pkg/category-service => ../category-service/pkg/category-service

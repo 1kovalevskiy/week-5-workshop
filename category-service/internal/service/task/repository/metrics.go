@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
-	taskpkg "github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/database"
+	taskpkg "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/task"
 )
 
 func (r Repository) GetMetrics(ctx context.Context) (*taskpkg.Metrics, error) {

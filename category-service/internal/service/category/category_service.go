@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 
-	internal_errors "github.com/ozonmp/week-5-workshop/category-service/internal/pkg/errors"
+	internal_errors "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/errors"
 )
 
 type Service struct {

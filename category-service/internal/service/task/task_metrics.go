@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	task_metrics "github.com/ozonmp/week-5-workshop/category-service/internal/service/task/metrics"
+	task_metrics "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/task/metrics"
 )
 
 type Metrics struct {

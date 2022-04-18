@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"

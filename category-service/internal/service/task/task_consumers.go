@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/database"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/database"
 )
 
 const (

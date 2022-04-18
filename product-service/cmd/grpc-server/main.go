@@ -9,8 +9,8 @@ import (
 
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	"github.com/opentracing/opentracing-go"
-	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
-	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/db"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/logger"
 	gelf "github.com/snovichkov/zap-gelf"
 	"github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
@@ -22,12 +22,12 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	_ "github.com/lib/pq"
 
-	grpc_category_service "github.com/ozonmp/week-5-workshop/category-service/pkg/category-service"
+	grpc_category_service "github.com/ozon-edu-go-2021/week-5-workshop/category-service/pkg/category-service"
 
-	"github.com/ozonmp/week-5-workshop/product-service/internal/config"
-	mwclient "github.com/ozonmp/week-5-workshop/product-service/internal/pkg/mw/client"
-	"github.com/ozonmp/week-5-workshop/product-service/internal/server"
-	product_service "github.com/ozonmp/week-5-workshop/product-service/internal/service/product"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/config"
+	mwclient "github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/mw/client"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/server"
+	product_service "github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/service/product"
 )
 
 func main() {

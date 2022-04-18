@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/ozonmp/week-5-workshop/product-service/internal/config"
-	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/db"
-	"github.com/ozonmp/week-5-workshop/product-service/migrations"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/config"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/db"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/migrations"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/pressly/goose/v3"

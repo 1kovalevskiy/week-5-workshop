@@ -21,13 +21,13 @@ import (
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
-	api "github.com/ozonmp/week-5-workshop/category-service/internal/app/category-service"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/config"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
-	mwserver "github.com/ozonmp/week-5-workshop/category-service/internal/pkg/mw/server"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/category"
-	"github.com/ozonmp/week-5-workshop/category-service/internal/service/task"
-	desc "github.com/ozonmp/week-5-workshop/category-service/pkg/category-service"
+	api "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/app/category-service"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/config"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/logger"
+	mwserver "github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/mw/server"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/category"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/service/task"
+	desc "github.com/ozon-edu-go-2021/week-5-workshop/category-service/pkg/category-service"
 )
 
 type GrpcServer struct {

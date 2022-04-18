@@ -7,8 +7,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
-	desc "github.com/ozonmp/week-5-workshop/product-service/pkg/product-service"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/logger"
+	desc "github.com/ozon-edu-go-2021/week-5-workshop/product-service/pkg/product-service"
 )
 
 func createGatewayServer(grpcAddr, gatewayAddr string, allowedOrigins []string) *http.Server {

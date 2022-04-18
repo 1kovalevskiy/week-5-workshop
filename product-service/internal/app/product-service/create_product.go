@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/opentracing/opentracing-go"
-	"github.com/ozonmp/week-5-workshop/product-service/internal/pkg/logger"
-	product_service "github.com/ozonmp/week-5-workshop/product-service/internal/service/product"
-	desc "github.com/ozonmp/week-5-workshop/product-service/pkg/product-service"
+	"github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/pkg/logger"
+	product_service "github.com/ozon-edu-go-2021/week-5-workshop/product-service/internal/service/product"
+	desc "github.com/ozon-edu-go-2021/week-5-workshop/product-service/pkg/product-service"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"

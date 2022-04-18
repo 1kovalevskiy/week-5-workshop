@@ -9,8 +9,8 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 
-	"github.com/ozonmp/week-5-workshop/category-service/internal/pkg/logger"
-	desc "github.com/ozonmp/week-5-workshop/category-service/pkg/category-service"
+	"github.com/ozon-edu-go-2021/week-5-workshop/category-service/internal/pkg/logger"
+	desc "github.com/ozon-edu-go-2021/week-5-workshop/category-service/pkg/category-service"
 )
 
 func createGatewayServer(grpcAddr, gatewayAddr string, allowedOrigins []string) *http.Server {
